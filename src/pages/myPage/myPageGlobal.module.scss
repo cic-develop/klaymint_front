@@ -1,0 +1,39 @@
+@use './src/global.module';
+
+.myPageSection {
+  text-align: center;
+  padding: 30px;
+  max-width: 1600px;
+  margin: 0 auto;
+  text-align: -webkit-center;
+
+  h2 {
+    cursor: pointer;
+    max-width: 200px;
+    color: global.$globalFontColor;
+  }
+
+  .onNeonText {
+    animation: pulsate 1.2s;
+    text-shadow: 0 0 4px global.$globalBtnBackgroundColor, 0 0 11px global.$globalBtnBackgroundColor, 0 0 19px global.$globalBtnBackgroundColor, 0 0 15px global.$globalBtnBorderColor, 0 0 45px global.$globalBtnBorderColor, 0 0 55px global.$globalBtnBorderColor,
+    0 0 95px global.$globalBtnBorderColor, 0 0 105px global.$globalBtnBorderColor;
+    color: #fff;
+  }
+  .offNeonText:hover {
+    text-shadow: 0 0 4px global.$globalBtnBackgroundColor, 0 0 11px global.$globalBtnBackgroundColor, 0 0 19px global.$globalBtnBackgroundColor, 0 0 15px global.$globalBtnBorderColor, 0 0 45px global.$globalBtnBorderColor, 0 0 55px global.$globalBtnBorderColor,
+    0 0 95px global.$globalBtnBorderColor, 0 0 105px global.$globalBtnBorderColor;
+    color: #fff;
+  }
+}
+
+@keyframes pulsate {
+  0% {
+    text-shadow: 0 0 4px #fff, 0 0 11px #fff, 0 0 19px #fff, 0 0 40px #fff, 0 0 80px #fff, 0 0 90px #fff,
+    0 0 100px #fff, 0 0 150px #fff;
+    color: #fff;
+  }
+  100% {
+    text-shadow: 0 0 4px global.$globalBtnBackgroundColor, 0 0 11px global.$globalBtnBackgroundColor, 0 0 19px global.$globalBtnBackgroundColor, 0 0 15px global.$globalBtnBorderColor, 0 0 45px global.$globalBtnBorderColor, 0 0 55px global.$globalBtnBorderColor,
+    0 0 95px global.$globalBtnBorderColor, 0 0 105px global.$globalBtnBorderColor;
+  }
+}

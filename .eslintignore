@@ -1,0 +1,15 @@
+# Ignore artifacts:
+node_modules
+src/_statics/*
+public/*
+dist/*
+build/*
+
+# Ignore all HTML files:
+*.html
+
+# Ignore all JS files:
+#*.js
+
+src/react-app-env.d.ts
+src/serviceWorker.ts

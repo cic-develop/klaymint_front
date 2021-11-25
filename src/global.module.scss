@@ -1,0 +1,140 @@
+/* Theme Main Color */
+$ThemeColor: '';
+$BtnEnableColor: #5160b8;
+$BtnDisableColor: rgb(131, 116, 151);
+
+/* Header */
+$HeaderColor: rgba(128, 128, 128, 0.7);
+
+/* Footer */
+$FooterColor: #909090;
+
+$globalFontColor: #6c757d;
+//$globalFontColor: #fff;
+$globalSubFontColor: rgba(255, 255, 255, 0.7);
+$globalWidth: 1024px;
+
+/* Detail Color */
+
+$globalBtnBackgroundColor: rgba(85, 16, 161, 0.1);
+$globalBtnBorderColor: #fff;
+
+
+$globalSubBtnBackgroundColor: rgba(255, 176, 50, 0.88);
+
+$globalArticleBtnBgColor : #ffffff21;
+
+$globalModalBgColor : #151f30;
+
+$globalSubBtnBorderColor: rgba(255, 176, 50, 0.88);
+$globalArticleBorderColor: #f35f36;
+
+$globalArticleFontColor : #fff;
+
+@keyframes moveGradient {
+	50% {
+		background-position: 100% 50%;
+	}
+}
+
+.gradient_nomal {
+	border: 1.5px solid #c6c6c6;
+}
+.gradient_uncommon {
+	border:1.5px solid  #f4f4f4;
+}
+.gradient_rare {
+	border:1.5px solid  #27e1d5;
+}
+.gradient_legendary {
+	--border-width: 3px;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+	border-radius: var(--border-width);
+
+    background: #fff;
+	&::after { position: absolute;
+        content: "";
+        top: calc(-0.4 * var(--border-width));
+        left: calc(-0.4 * var(--border-width));
+        z-index: -1;
+        width: calc(100% + var(--border-width) * 0.5);
+        height: calc(100% + var(--border-width) * 0.8);
+        // width: 173px;
+        // height: 58px;
+        background: linear-gradient( 60deg, #6b3b00,#fcefa8, #9f6b16, #D5BD47,#fcefa8, #ead268, #c6b156, #9A8C31,#78530E);
+        background-size: 300% 300%;
+        background-position: 0 50%;
+        border-radius: calc(3.5 * var(--border-width));
+        animation-name: moveGradient;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+    }
+}
+.gradient_myth {
+	--border-width: 3px;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	color: white;
+	border-radius: var(--border-width);
+
+    background: #fff;
+	&::after { position: absolute;
+        content: "";
+        top: calc(-0.4 * var(--border-width));
+        left: calc(-0.4 * var(--border-width));
+        z-index: -1;
+        width: calc(100% + var(--border-width) * 0.5);
+        height: calc(100% + var(--border-width) * 0.8);
+        // background: linear-gradient( 60deg,#1E0C11, #620B10,,#FFCD00,#F0FF00,#dfdbda );
+        background: linear-gradient( 60deg,#8d0000,#F7000A,#680000,#ff0912,#9C0000,#B10503 );
+        background-size: 300% 300%;
+        background-position: 0 50%;
+        border-radius: calc(3.5 * var(--border-width));
+        animation-name: moveGradient;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+    }
+}
+//gradient_unique
+//gradient_myth
+//gradient_legendary
+.gradient_unique {
+	--border-width: 3px;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	color: white;
+	border-radius: var(--border-width);
+
+    background: #fff;
+	&::after { position: absolute;
+        content: "";
+        top: calc(-0.4 * var(--border-width));
+        left: calc(-0.4 * var(--border-width));
+        z-index: -1;
+        width: calc(100% + var(--border-width) * 0.5);
+        height: calc(100% + var(--border-width) * 0.8);
+        // background: radial-gradient( 120deg, #910161,#fc82ec,#c013a3, #d80c94, #ad0096,#d360ba, #b62396);
+        background: linear-gradient(60deg, rgba(131,0,114,1) 6%, rgba(204,0,133,1) 35%, rgba(255,181,234,1) 50%, rgba(208,25,187,1) 63%, rgba(175,0,140,1) 78%, rgba(190,0,168,1) 92%);
+        background-size: 300% 300%;
+        background-position: 0 50%;
+
+        border-radius: calc(3.5 * var(--border-width));
+        animation-name: moveGradient;
+        animation-duration: 3s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+    }
+}
+$globalArticleFontColor: #fff;

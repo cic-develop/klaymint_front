@@ -1,0 +1,12 @@
+/* Main Components Style */
+$MainBoxColor: rgba(255, 255, 255, 0.5);
+$MainSectionColor: rgba(255, 255, 255, 0.5);
+
+.box {
+    background-color: rgb(255 255 255 / 0%);
+}
+
+.closed {
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 1);
+}

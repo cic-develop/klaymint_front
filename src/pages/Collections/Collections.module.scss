@@ -1,0 +1,218 @@
+.kaikasIcon {
+    margin-right: 4px;
+    margin-bottom: 4px;
+}
+
+.DashBoardSection {
+    width: 100%;
+    max-width: 1500px;
+    margin: 40px auto 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+
+    .tableTitleContainer {
+        min-height: 64px;
+        display: flex;
+        position: relative;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .tableSubTitleContainer {
+        border: 1px solid #90a4ae;
+        margin-bottom: 20px;
+        width: 100%;
+        justify-content: center;
+        display: inline-flex;
+        padding: 12px;
+
+        button {
+            width: 300px;
+            box-shadow: 3px 1px 6px #0000007d;
+            background-color: #ffffff21;
+            margin: 10px;
+            padding: 10px;
+
+            .info {
+                .numberInfoSpan {
+                    font-weight: bold;
+                }
+
+                .percentageInfoSpan {
+                    .downPercentage {
+                        background: #047edb;
+                    }
+
+                    .upPercentage {
+                        background: rgba(255, 176, 50, 0.88);
+                    }
+
+                    p {
+                        border-radius: 6px;
+                        font-size: 14px;
+                        color: #fff;
+                        line-height: 28px;
+                        padding: 0 5px;
+                        max-width: 85px;
+                        margin: 0 auto;
+                    }
+                }
+            }
+        }
+    }
+
+    .tableMainContainer {
+        width: 100%;
+        display: table;
+        border-spacing: 0;
+        border-collapse: collapse;
+        min-width: 0;
+
+        .tableThead {
+            display: table-header-group;
+
+            .tableTheadTr {
+                vertical-align: middle;
+                text-align: -webkit-center;
+
+                th {
+                    color: #fff;
+                }
+
+                .tableTheadIdxNumber {
+                    text-align: center;
+                }
+
+                .tableTheadBrandName {
+                    text-align: left;
+                }
+
+                .tableTheadAveragePrice {
+                    text-align: right;
+                }
+
+                .tableTheadMarketCap {
+                    text-align: right;
+                }
+
+                .tableTheadVolume {
+                    text-align: right;
+                }
+
+                .tableTheadVolumePercentage {
+                    text-align: right;
+                }
+
+                .tableTheadChart {
+                    text-align: center;
+                }
+            }
+        }
+
+        .tableTbody {
+            tr {
+                vertical-align: middle;
+                border-bottom: 1px solid rgb(154, 154, 154);
+
+                span {
+                    color: #fff;
+                }
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.1);
+                }
+            }
+
+            .tableTbodyIdxNumber {
+                text-align: center;
+            }
+
+            .tableTbodyBrandName {
+                text-align: left;
+                display: flex;
+
+                img {
+                    border-radius: 50%;
+                    width: 50px;
+                    height: 50px;
+                    margin-right: 8px;
+                }
+
+                .name {
+                    :nth-child(1) {
+                        font-weight: bold;
+                        font-size: 17px;
+                    }
+
+                    :nth-child(2) {
+                        font-size: 13px;
+                    }
+                }
+            }
+
+            .tableTbodyAveragePrice {
+                text-align: right;
+
+                .downPercentage {
+                    color: #047edb;
+                }
+
+                .upPercentage {
+                    color: rgba(255, 176, 50, 0.88);
+                }
+            }
+
+            .tableTbodyMarketCap {
+                text-align: right;
+            }
+
+            .tableTbodyVolume {
+                text-align: right;
+
+                .downPercentage {
+                    color: #047edb;
+                }
+
+                .upPercentage {
+                    color: rgba(255, 176, 50, 0.88);
+                }
+            }
+
+            .tableTbodyVolumePercentage {
+                text-align: right;
+
+                .downPercentage {
+                    color: #047edb;
+                }
+
+                .upPercentage {
+                    color: rgba(255, 176, 50, 0.88);
+                }
+            }
+
+            .tableTbodyChart {
+                text-align: center;
+
+                button {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+
+                    svg {
+                        width: 25px;
+                        height: 25px;
+                        fill: #fff;
+                    }
+                    &:hover {
+                        background-color: rgba(255, 176, 50, 0.88);
+                    }
+                }
+            }
+        }
+    }
+}
+
+.volumeFlexP {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}

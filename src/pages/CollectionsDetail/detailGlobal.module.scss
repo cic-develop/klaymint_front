@@ -1,0 +1,57 @@
+/* detail PageMaxWidth */
+$defaultMaxWidth: 80vw;
+
+.imageSectionDiv {
+    margin: 0;
+    padding: 0;
+}
+
+.buttonSectionDiv {
+    max-width: 1520px;
+    margin: 0 auto;
+    padding: 0px 70px;
+}
+
+.collectionDetailMain {
+    text-align: -webkit-center;
+
+    .collectionDetailMobileDiv {
+        display: none;
+    }
+
+    .collectionDetailFlexDisplay {
+        display: flex;
+        max-width: 1600px;
+        align-items: center;
+        place-content: center;
+        justify-content: space-around;
+        margin-top: 5vh;
+        margin-bottom: 5vh;
+    }
+}
+
+@media (max-width: 1500px) {
+    .collectionDetailMain {
+        .collectionDetailPcDiv {
+            display: none;
+        }
+
+        .collectionDetailMobileDiv {
+            display: block;
+        }
+    }
+}
+
+@media (max-width: 730px) {
+    .collectionDetailMain {
+        .collectionDetailFlexDisplay {
+            display: block;
+        }
+    }
+    .buttonSectionDiv {
+        margin: 0px;
+        padding: 0px 15px;
+    }
+}
+
+/* ********************************************************************** */

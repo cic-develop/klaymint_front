@@ -1,0 +1,36 @@
+{
+  "name": "rsteam_admin_website",
+  "version": "1.0.0",
+  "description": "RSTeam_Admin_Website_Frontend_Server",
+  "main": "start.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node start.js",
+    "dev": "cross-env NODE_ENV=development nodemon start",
+    "pm2": "sudo pm2 start npm --name 'admin_website_frontend_server' -- run start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "http": "0.0.1-security",
+    "https": "^1.0.0",
+    "ip": "^1.1.5",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.4.17",
+    "public-ip": "^4.0.3",
+    "sha256": "^0.2.0",
+    "uuid": "^3.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}

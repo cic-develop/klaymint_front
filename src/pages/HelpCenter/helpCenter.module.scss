@@ -1,0 +1,39 @@
+/* Main Components Style */
+$MainBoxColor: rgba(255, 255, 255, 0);
+$MainSectionColor: rgba(255, 255, 255, 0.5);
+
+.box {
+    background-color: $MainBoxColor;
+}
+
+.qna_item {
+    //border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #404040;
+
+    button {
+        background-color: rgba(255, 255, 255, 0);
+        b {
+            color: white;
+        }
+    }
+    div {
+        span {
+            color: #d2d2d2;
+            font-size: 0.9em;
+            white-space: normal;
+        }
+
+        a {
+            color: #b6b6f8;
+            font-size: 0.9em;
+            text-decoration: underline;
+
+            &:hover {
+                color: #fff;
+                font-size: 1em;
+                white-space: normal;
+            }
+        }
+    }
+}

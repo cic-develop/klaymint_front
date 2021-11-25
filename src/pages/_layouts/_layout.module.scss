@@ -1,0 +1,147 @@
+@use './src/global.module';
+
+.headerSection {
+    width: 100%;
+    z-index: 9999;
+    background: none;
+}
+
+.headerModalButton {
+    color: global.$globalBtnBorderColor;
+    border: none;
+
+    i::before {
+        color: global.$globalBtnBorderColor;
+    }
+
+    &:hover {
+        background-color: global.$globalArticleBorderColor;
+    }
+}
+
+.headerMainMenus {
+    color: white;
+
+    &:hover {
+        color: white;
+        background-color: rgba(255, 192, 0, 0.5);
+    }
+
+    &:active {
+        color: white;
+        background-color: rgba(255, 192, 0, 1);
+    }
+
+    &:focus {
+        color: white;
+    }
+}
+
+.burgerDropMenu {
+    border: #fff solid 1px;
+    background-color: rgba(12, 1, 0, 29);
+}
+
+.modalHeaderContainer {
+    background-color: peru;
+    border-bottom: 1px solid rgba(108, 117, 125, 0.4);
+
+    h5 {
+        font-weight: bold;
+        color: global.$globalArticleFontColor;
+    }
+}
+
+.modalBodyContainer {
+    .kaiasButton {
+        color: #fff;
+        border: none;
+        background-color: rgba(0, 0, 0, 0.78);
+    }
+
+    .kaiasButton:hover {
+        background-color: rgba(0, 0, 0, 1);
+    }
+
+    .klipButton {
+        color: #000;
+        border: none;
+        background-color: rgba(243, 221, 6, 0.75);
+    }
+
+    .klipButton:hover {
+        background-color: rgb(255, 192, 0);
+    }
+
+    .formCheckInput {
+        input:checked {
+            background-color: global.$globalBtnBackgroundColor;
+            border-color: global.$globalBtnBackgroundColor;
+        }
+
+        input:focus {
+            box-shadow: none;
+            outline: 0;
+        }
+    }
+
+    a {
+        font-size: 0.8em;
+
+        &:hover {
+            text-decoration: underline;
+            text-underline-position: under;
+        }
+    }
+}
+
+.modalKlipBodyContainer {
+    background-color: #f7e600;
+}
+
+.klipConnDescription {
+    font-size: 0.8em;
+}
+
+.smallFontSize {
+    font-size: 0.8em;
+}
+
+/** footer */
+.thumb {
+    background-color: rgba(255, 255, 255, 0);
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    margin: 0;
+
+    &:hover {
+        background-color: global.$globalArticleBorderColor;
+    }
+}
+
+.top_btn {
+    cursor: pointer;
+    font-size: 2.5em;
+    //color: global.$globalSubBtnBackgroundColor;
+
+    &:hover {
+        color: global.$globalArticleBorderColor;
+    }
+}
+
+.mainFooter {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+
+    .concatContainer {
+        font-family: 'Cafe24SsurroundAir';
+        font-size: 1.5vh;
+    }
+    // .termOfUse {
+    //     &:hover {
+    //         text-decoration: underline;
+    //         text-underline-position: under;
+    //     }
+    // }
+}
