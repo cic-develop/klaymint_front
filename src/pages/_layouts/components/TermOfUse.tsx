@@ -15,7 +15,6 @@ const LangTermOfUse: React.FC<any> = (): JSX.Element => {
         // 'ja-JP': ja_JP,
         // 'zh-CN': zh_CN,
     };
-
     return <>{obj[language] ?? obj[navigator.language]}</>;
 };
 

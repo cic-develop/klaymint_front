@@ -7,7 +7,7 @@ import NoItems from '@/_components/commons/NoItems';
 import iconKaikas from '@/_statics/images/icon_kaikas.png';
 import { numberWithCommas } from '@/helpers/common.helper';
 import MyPageModal from '@/pages/myPage/components/Modal';
-import { getAllToken_in_factory, getAllToken_in_for_move_factory } from '@/helpers/klaytn.api';
+import { getAllToken_in_factory } from '@/helpers/klaytn.api';
 import { enNode, factoryAddress, sellCancelNFTABI } from '@/helpers/_common.linkChain';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/connectors.redux';
@@ -19,11 +19,11 @@ import { setPromiseAll, toKlayFromPeb } from '@/helpers/_common';
 import { setAddress } from '@/redux/reducers/Wallet.reducer';
 import Caver from 'caver-js';
 import axios from 'axios';
+import { getIsOwner, postExceptionCorsHandlerAll } from '@/helpers/klaymint.api';
 
 const HelpCancelCanter = () => {
     const dispatch = useDispatch();
     const { list: colList } = useSelector((store: RootState) => store.Collections);
-    const { contractListInfo } = useSelector((store: RootState) => store.GlobalStatus);
 
     const Lang = useLanguages();
 
@@ -43,7 +43,28 @@ const HelpCancelCanter = () => {
         scrollEventListener,
     } = useList({});
 
-    const lostTokenModalOnClickHandler = (item) => {
+    const ownerOf = async (tokenId, type, contractAddress) => {
+        if (type === 'kaikas') {
+            const { klaytn }: any = window;
+            if (klaytn) {
+                const caver = new Caver(klaytn);
+
+                const kip17 = caver.kct.kip17.create(contractAddress);
+                const res = await kip17.ownerOf(tokenId);
+
+                return res;
+            }
+        } else {
+            const res = await getIsOwner(tokenId, contractAddress);
+
+            return res.data;
+        }
+    };
+
+    const lostTokenModalOnClickHandler = async (item) => {
+        console.log(item);
+        console.log(colList);
+
         const currentContract = colList.filter(
             (obj) => obj.contract_address.toLowerCase() === item.contractAddress.toLowerCase(),
         );
@@ -51,6 +72,11 @@ const HelpCancelCanter = () => {
 
         // 나중에 같은 컨트랙트에서 두개의 팩토리가 나오는 경우에는 로직을 수정해야하는 부분
         // 인덱스가 0이 아니라 별도의 방법을 통해 두개의 팩토리중 해당 팩토리를 찾아야함
+
+        if (currentContract[0].id === 1) {
+            const currentOwner = await ownerOf(item.token_id, wallet.type, currentContract[0].contract_address);
+            currentContract[0].factory_address = currentOwner;
+        }
         const klaymint = new KlayMint(currentContract[0].contract_address, currentContract[0].factory_address, colList);
 
         const isWallet = wallet.info.address !== '';
@@ -86,11 +112,15 @@ const HelpCancelCanter = () => {
         });
         factoryAddress.push({ factory_address: '0x98649369e4ca48eA41351BBC75A562BC9EeA7662' });
 
+        console.log(factoryAddress);
+        console.log(contractAddress);
+
         const arr = [];
 
         const getAllToken_in_factory_loop = async (factoryAddress, contractAddress, cursor?) => {
             const res = await getAllToken_in_factory(factoryAddress, contractAddress, cursor);
             arr.push(res.data.items);
+            console.log(arr);
             if (res.data.cursor !== '')
                 return getAllToken_in_factory_loop(factoryAddress, contractAddress, res.data.cursor);
             else {
@@ -101,19 +131,53 @@ const HelpCancelCanter = () => {
                     );
 
                 const arr2 = [];
+                const exceptionArr = [];
                 await setPromiseAll(mySalesTokenList, async (item) => {
+                    let response;
                     try {
-                        const token = await axios.get(item.extras.tokenUri);
-                        token.data.contractAddress = item.contractAddress;
-                        arr2.push(token.data);
+                        response = await axios.get(item.extras.tokenUri);
+                        response.data.contractAddress = item.contractAddress;
+                        arr2.push(response.data);
                     } catch (e) {
-                        const case2 = item.extras.tokenUri.replace('ipfs://', 'https://klaymint.mypinata.cloud/ipfs/');
-                        const token = await axios.get(case2);
-                        token.data.image = token.data.image.replace('ipfs://', 'https://klaymint.mypinata.cloud/ipfs/');
-                        token.data.contractAddress = item.contractAddress;
-                        arr2.push(token.data);
+                        try {
+                            const case2 = item.extras.tokenUri.replace(
+                                'ipfs://',
+                                'https://klaymint.mypinata.cloud/ipfs/',
+                            );
+                            response = await axios.get(case2);
+                            response.data.image = response.data.image.replace(
+                                'ipfs://',
+                                'https://klaymint.mypinata.cloud/ipfs/',
+                            );
+                            response.data.contractAddress = item.contractAddress;
+                            arr2.push(response.data);
+                        } catch (error) {
+                            response = await axios.post(`${window.envBackHost}/exception/corsHandler`, {
+                                uri: item.extras.tokenUri,
+                            });
+                            const imageUri = response.data.image.replace(
+                                'ipfs://',
+                                'https://klaymint.mypinata.cloud/ipfs/',
+                            );
+                            response.data.image = imageUri.replace(
+                                'gateway.pinata.cloud/ipfs/',
+                                'klaymint.mypinata.cloud/ipfs/',
+                            );
+                            response.data.contractAddress = item.contractAddress;
+                            arr2.push(response.data);
+                            // exceptionArr.push(item.extras.tokenUri);
+                        }
                     }
                 });
+
+                // if (exceptionArr.length > 0) {
+                //     console.log('exception !');
+                //     console.log(exceptionArr);
+                //     const res = await postExceptionCorsHandlerAll(exceptionArr);
+                //     arr2.push(res.data);
+                //     const result = arr2.flat();
+                //     return result;
+                // }
 
                 return arr2;
             }
@@ -121,6 +185,7 @@ const HelpCancelCanter = () => {
 
         for await (const item of factoryAddress) {
             const arr2A = await getAllToken_in_factory_loop(item.factory_address, contractAddress);
+            console.log(arr2A);
             const temp = [...list];
             const newArr = temp.concat(arr2A);
             setList(newArr);

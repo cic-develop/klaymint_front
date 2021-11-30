@@ -5,7 +5,7 @@ import _notExistClassArticleModal from '@/_components/commons/modals/_notExistCl
 
 interface Props {
     setModal: React.Dispatch<React.SetStateAction<boolean>>;
-    modalProps: ArticleModalProps;
+    modalProps: any;
 }
 
 const MyPageModal = ({ modalProps, setModal }: Props) => {
@@ -13,7 +13,7 @@ const MyPageModal = ({ modalProps, setModal }: Props) => {
 
     return (
         <section>
-            {modalProps.collection.is_class ? (
+            {modalProps.collection?.is_class ? (
                 <_ArticleModal props={modalProps.props} setModal={setModal} collection={modalProps.collection} />
             ) : (
                 <_notExistClassArticleModal

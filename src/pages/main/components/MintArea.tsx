@@ -25,12 +25,15 @@ const MintArea: React.FC<any> = (props): JSX.Element => {
 
         // 이미지 슬라이더 초기화
         const _splide = new Splide('.splide' + id, {
-            type: 'loop',
+            type: 'slide',
+            //autoWidth: true,
             start: 0,
-            // perPage: splideElement.clientWidth > 576 ? 3 : 1,
-            // perMove: splideElement.clientWidth > 576 ? 3 : 1,
+            perPage: 3,
+            perMove: 0,
             autoplay: false,
-            interval: 3000,
+            // focus: 'center',
+            // trimSpace: 'move',
+            //interval: 3000,
             drag: true,
             lazyLoad: 'nearby',
             pagination: true,
@@ -59,7 +62,23 @@ const MintArea: React.FC<any> = (props): JSX.Element => {
     }, []);
 
     useEffect(() => {
-        splide && splide.refresh();
+        if (!splide) return;
+
+        const maxPerPage = _.size(data);
+
+        splide._options.perPage = maxPerPage > 0 && maxPerPage <= 3 ? maxPerPage : 3;
+        splide._options.breakpoints = {
+            4196: {
+                perPage: maxPerPage > 0 && maxPerPage <= 3 ? maxPerPage : 1,
+            },
+            1000: {
+                perPage: maxPerPage - 1 > 0 && maxPerPage - 1 <= 3 ? maxPerPage - 1 : 1,
+            },
+            800: {
+                perPage: maxPerPage - 2 > 0 && maxPerPage - 2 <= 3 ? maxPerPage - 2 : 1,
+            },
+        };
+        splide.refresh();
     }, [data]);
 
     return (

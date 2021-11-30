@@ -5,37 +5,30 @@ import { detectedBreakpoint, isMobile } from '@/redux/reducers/GlobalStatus.redu
 import { getServerInfo } from '@/helpers/klaymint.api';
 import { loadCollections } from '@/redux/reducers/Collections.reducer';
 
+import webSocket from '@/helpers/websocket.helper';
+
 import Layout from '@/pages/_layouts';
 import GLoader from '@/_components/commons/loaders/global_loader';
 import Toast from '@/_components/commons/toasts/Toast_bs5';
 
+import TermOfUse from '@/pages/_layouts/components/TermOfUse';
+import { ModalButton, Modal } from '@/_components/commons/modals';
+
 import Maintenance from '@/pages/Maintenance';
 import Footer from '@/pages/_layouts/components/Footer';
+import axios from 'axios';
 
 const App: React.FC<any> = (): JSX.Element => {
     const dispatch = useDispatch();
-    const [srv, setSrv] = useState(null);
-
-    const checkInfo = useCallback(() => {
-        if (!srv) return;
-        console.log('sss');
-        getServerInfo()
-            .then((res) => {
-                if (!res?.data) {
-                    return;
-                }
-                console.log(srv.cfg_refresh_check_time, res.data[0].cfg_refresh_check_time);
-                if (srv.cfg_refresh_check_time !== res.data[0].cfg_refresh_check_time) {
-                    console.log('새로고침!!!!!!');
-                }
-            })
-            .catch((err) => {});
-    }, [srv]);
 
     /**
      * Detected Window width breakpoint
      */
     useEffect(() => {
+        //setTimeout(() => console.log(webSocket.state()), 1000);
+        //webSocket.sendMessage('pppppppdkjhfkdsjhfdskhfksd');
+
+        //Browser Window Size Detect Handler
         let pass = 0;
         const detectBreakpoint = () => {
             if (++pass % 10 === 0) {
@@ -43,7 +36,7 @@ const App: React.FC<any> = (): JSX.Element => {
                 dispatch(isMobile());
             }
         };
-        window.addEventListener('resize', () => detectBreakpoint());
+        window.addEventListener('resize', detectBreakpoint);
 
         return () => {
             window.removeEventListener('resize', () => {
@@ -57,30 +50,17 @@ const App: React.FC<any> = (): JSX.Element => {
         dispatch(loadCollections());
     }, []);
 
-    // useEffect(() => {
-    //     // 초기 렌더에서 전역변수에 저장할 contractList info 를 요청한다.
-    //     getServerInfo()
-    //         .then((res) => {
-    //             if (!res?.data) {
-    //                 return;
-    //             }
-    //             setSrv(res.data[0]);
-    //             console.log(res.data[0].cfg_refresh_check_time);
-    //         })
-    //         .catch((err) => {});
-
-    //     setInterval(checkInfo, 1000);
-    // }, []);
-
     // return (
     //     <>
     //         <Maintenance />
     //         <Footer />
     //     </>
     // );
+    //
 
     return (
         <>
+            {/*<img src="https://klayrabbit.s3.ap-northeast-2.amazonaws.com/images/2700.png" alt="" />*/}
             <GLoader />
             <Toast />
             <Layout>

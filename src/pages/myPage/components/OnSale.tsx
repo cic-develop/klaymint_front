@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import css from '@/pages/CollectionsDetail/components/Article.module.scss';
 import cx from 'classnames';
 import _ from 'lodash';
@@ -17,11 +17,12 @@ import NoItems from '@/_components/commons/NoItems';
 
 import iconKaikas from '@/_statics/images/icon_kaikas.png';
 import KlayMint from '@/helpers/linkBlockchainNetwork';
+import { getIsOwner } from '@/helpers/klaymint.api';
+import Caver from 'caver-js';
 
 const OnSale = ({ loading }) => {
     const dispatch = useDispatch();
     const wallet = useSelector((store: RootState) => store.Wallet);
-    const { contractListInfo } = useSelector((store: RootState) => store.GlobalStatus);
     const { list, classs } = useSelector((store: RootState) => store.Collections);
     const Lang = useLanguages();
 
@@ -39,41 +40,75 @@ const OnSale = ({ loading }) => {
         scrollEventListener,
     } = useList({});
 
-    const modalOnClickHandler = (item) => {
-        console.log(item);
-        const currentContract = list.filter((obj) => obj.ctl_idx === item.contract_list_id);
-        console.log(currentContract);
-        // const currentContract = contractListInfo.list.filter((obj) => obj.id === item.contract_list_id);
+    const ownerOf = async (tokenId, type, contractAddress) => {
+        if (type === 'kaikas') {
+            const { klaytn }: any = window;
+            if (klaytn) {
+                const caver = new Caver(klaytn);
 
-        // 해당부분은 unlisted 와 다르게 수정이 필요없음, DB 에서 가져오는 리스트라서 contract_list_id 를 포함해서 가져오기때문에,
-        // 하나의 컨트랙트라도 여려개의 팩토리를 가지는 경우 대응 가능함,
-        console.log(currentContract[0].contract_address);
-        const klaymint = new KlayMint(currentContract[0].contract_address, currentContract[0].factory_address, list);
+                const kip17 = caver.kct.kip17.create(contractAddress);
+                const res = await kip17.ownerOf(tokenId);
 
-        const isWallet = wallet.info.address !== '';
-        const btnStr = isWallet ? 'SELL CANCEL' : 'CONNECT WALLET';
-        const event = isWallet
-            ? klaymint.sellCancelRequest
-            : () => window?.toast('error', Lang.err_msg_fail_connect_wallet);
-        const argument = [item.token_id, dispatch];
-        // const attrArr = item.attributes.filter((item) => item.trait_type !== 'id').map((item) => Object.values(item));
+                return res;
+            }
+        } else {
+            const res = await getIsOwner(tokenId, contractAddress);
 
-        setModalProps({
-            collection: currentContract[0],
-            props: {
-                title: `${currentContract[0]?.brand_name} #${item.token_id}`,
-                mainImage: `${item.image_url}`,
-                // mainAttrs: attrArr,
-                footerPrice: item.sales_price,
-                footerButtons: [btnStr],
-                onClick: {
-                    event,
-                    argument,
-                },
-            },
-        });
-        setModal(true);
+            return res.data;
+        }
     };
+
+    const modalOnClickHandler = useCallback(
+        async (item) => {
+            if (list) {
+                const currentContract = list.filter((obj) => obj.id === item.contract_list_id);
+
+                // 해당부분은 unlisted 와 다르게 수정이 필요없음, DB 에서 가져오는 리스트라서 contract_list_id 를 포함해서 가져오기때문에,
+                // 하나의 컨트랙트라도 여려개의 팩토리를 가지는 경우 대응 가능함,
+                if (currentContract[0].contract_address) {
+                    if (currentContract[0].id === 1) {
+                        const currentOwner = await ownerOf(
+                            item.token_id,
+                            wallet.type,
+                            currentContract[0].contract_address,
+                        );
+                        currentContract[0].factory_address = currentOwner;
+                    }
+
+                    const klaymint = new KlayMint(
+                        currentContract[0]?.contract_address,
+                        currentContract[0]?.factory_address,
+                        list,
+                    );
+
+                    const isWallet = wallet.info.address !== '';
+                    const btnStr = isWallet ? 'SELL CANCEL' : 'CONNECT WALLET';
+                    const event = isWallet
+                        ? klaymint.sellCancelRequest
+                        : () => window?.toast('error', Lang.err_msg_fail_connect_wallet);
+                    const argument = [item.token_id, dispatch];
+                    // const attrArr = item.attributes.filter((item) => item.trait_type !== 'id').map((item) => Object.values(item));
+
+                    setModalProps({
+                        collection: currentContract[0],
+                        props: {
+                            title: `${currentContract[0]?.brand_name} #${item.token_id}`,
+                            mainImage: `${item.image_url}`,
+                            // mainAttrs: attrArr,
+                            footerPrice: item.sales_price,
+                            footerButtons: [btnStr],
+                            onClick: {
+                                event,
+                                argument,
+                            },
+                        },
+                    });
+                    setModal(true);
+                }
+            }
+        },
+        [list],
+    );
 
     useEffect(
         () =>
@@ -122,7 +157,6 @@ const OnSale = ({ loading }) => {
                 </div>
                 {_.size(state.view_list) <= 0 && <NoItems>{Lang.list_no_sales}</NoItems>}
                 {_.map(state.view_list, (item) => {
-                    console.log(item);
                     return (
                         <div
                             key={item.id}

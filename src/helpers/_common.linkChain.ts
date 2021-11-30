@@ -75,18 +75,22 @@ export const mintNFTABI = {
 };
 
 export const mintNFTABI_TEST = {
-    name: 'mintNFT',
-    type: 'function',
+    constant: false,
     inputs: [
         {
+            name: '_roundNumber',
             type: 'uint256',
-            name: '_mintQ',
         },
         {
+            name: '_mintQ',
             type: 'uint256',
-            name: '_mtlIdx',
         },
     ],
+    name: 'mintNFT',
+    outputs: [],
+    payable: true,
+    stateMutability: 'payable',
+    type: 'function',
 };
 
 export const sellNFTABI = {
@@ -1816,6 +1820,644 @@ export const ccc_factoryABI = [
             {
                 name: '',
                 type: 'uint256',
+            },
+        ],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: true,
+        inputs: [
+            {
+                name: '',
+                type: 'uint256',
+            },
+        ],
+        name: 'rounds',
+        outputs: [
+            {
+                name: 'round',
+                type: 'uint256',
+            },
+            {
+                name: 'startTimeStamp',
+                type: 'uint256',
+            },
+            {
+                name: 'endTimeStamp',
+                type: 'uint256',
+            },
+            {
+                name: 'mintPrice',
+                type: 'uint256',
+            },
+            {
+                name: 'mintQ',
+                type: 'uint256',
+            },
+            {
+                name: 'mintStart_id',
+                type: 'uint256',
+            },
+            {
+                name: 'mintEnd_id',
+                type: 'uint256',
+            },
+        ],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: true,
+        inputs: [
+            {
+                name: '',
+                type: 'address',
+            },
+        ],
+        name: 'sellings',
+        outputs: [
+            {
+                name: 'owner',
+                type: 'address',
+            },
+        ],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: true,
+        inputs: [
+            {
+                name: '',
+                type: 'uint256',
+            },
+        ],
+        name: 'sellItems',
+        outputs: [
+            {
+                name: 'owner',
+                type: 'address',
+            },
+            {
+                name: 'sellPrice',
+                type: 'uint256',
+            },
+            {
+                name: 'tokenId',
+                type: 'uint256',
+            },
+            {
+                name: 'isSelling',
+                type: 'bool',
+            },
+        ],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: true,
+        inputs: [
+            {
+                name: '_tokenId',
+                type: 'uint256',
+            },
+        ],
+        name: 'token_trade_history',
+        outputs: [
+            {
+                name: '',
+                type: 'uint256[]',
+            },
+            {
+                name: '',
+                type: 'address[]',
+            },
+        ],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: true,
+        inputs: [
+            {
+                name: '_user',
+                type: 'address',
+            },
+        ],
+        name: 'user_selling_items',
+        outputs: [
+            {
+                name: '',
+                type: 'uint256[]',
+            },
+            {
+                name: '',
+                type: 'uint256[]',
+            },
+        ],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+];
+
+const test = [
+    {
+        constant: false,
+        inputs: [
+            {
+                name: 'account',
+                type: 'address',
+            },
+        ],
+        name: 'addOwner',
+        outputs: [],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [
+            {
+                name: '_tokenId',
+                type: 'uint256',
+            },
+        ],
+        name: 'admin_sell_cancel',
+        outputs: [],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [
+            {
+                name: '_tokenId',
+                type: 'uint256',
+            },
+        ],
+        name: 'buy',
+        outputs: [],
+        payable: true,
+        stateMutability: 'payable',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [
+            {
+                name: '_to',
+                type: 'address',
+            },
+            {
+                name: '_tokenId',
+                type: 'uint256',
+            },
+            {
+                name: '_uri',
+                type: 'string',
+            },
+        ],
+        name: 'mint',
+        outputs: [],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [],
+        name: 'mint_release',
+        outputs: [],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [
+            {
+                name: '_roundNumber',
+                type: 'uint256',
+            },
+            {
+                name: '_mintQ',
+                type: 'uint256',
+            },
+        ],
+        name: 'mintNFT',
+        outputs: [],
+        payable: true,
+        stateMutability: 'payable',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [],
+        name: 'release',
+        outputs: [],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [],
+        name: 'renounceOwner',
+        outputs: [],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [
+            {
+                name: '_tokenId',
+                type: 'uint256',
+            },
+            {
+                name: '_sellPrice',
+                type: 'uint256',
+            },
+        ],
+        name: 'sell',
+        outputs: [],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [
+            {
+                name: '_tokenId',
+                type: 'uint256',
+            },
+        ],
+        name: 'sell_cancel',
+        outputs: [],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [
+            {
+                name: '_address',
+                type: 'address',
+            },
+        ],
+        name: 'set_deposit_wallet',
+        outputs: [],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [
+            {
+                name: '_address',
+                type: 'address',
+            },
+        ],
+        name: 'setKlayMintAddress',
+        outputs: [],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [
+            {
+                name: '_mintFeePercent',
+                type: 'uint256',
+            },
+        ],
+        name: 'setMintFee',
+        outputs: [],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [
+            {
+                name: '_address',
+                type: 'address',
+            },
+        ],
+        name: 'setNFTProjectAddress',
+        outputs: [],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [
+            {
+                name: '_roundNumber',
+                type: 'uint256',
+            },
+            {
+                name: '_startTimeStamp',
+                type: 'uint256',
+            },
+            {
+                name: '_endTimeStamp',
+                type: 'uint256',
+            },
+            {
+                name: '_mintPrice',
+                type: 'uint256',
+            },
+            {
+                name: '_mintQ',
+                type: 'uint256',
+            },
+            {
+                name: '_mintStart_id',
+                type: 'uint256',
+            },
+            {
+                name: '_mintEnd_id',
+                type: 'uint256',
+            },
+        ],
+        name: 'setRound',
+        outputs: [],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [
+            {
+                name: '_klaymint',
+                type: 'uint256',
+            },
+            {
+                name: '_project',
+                type: 'uint256',
+            },
+        ],
+        name: 'setTradeFee',
+        outputs: [],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                name: '_owner',
+                type: 'address',
+            },
+            {
+                indexed: true,
+                name: '_tokenId',
+                type: 'uint256',
+            },
+            {
+                indexed: true,
+                name: '_mtlIdx',
+                type: 'uint256',
+            },
+        ],
+        name: 'mintEvent',
+        type: 'event',
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                name: '_owner',
+                type: 'address',
+            },
+            {
+                indexed: true,
+                name: '_tokenId',
+                type: 'uint256',
+            },
+            {
+                indexed: true,
+                name: '_sellPrice',
+                type: 'uint256',
+            },
+        ],
+        name: 'sellEvent',
+        type: 'event',
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                name: '_seller',
+                type: 'address',
+            },
+            {
+                indexed: true,
+                name: '_buyer',
+                type: 'address',
+            },
+            {
+                indexed: true,
+                name: 'tokenId',
+                type: 'uint256',
+            },
+            {
+                indexed: false,
+                name: '_sellPrice',
+                type: 'uint256',
+            },
+        ],
+        name: 'buyEvent',
+        type: 'event',
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                name: 'owner',
+                type: 'address',
+            },
+            {
+                indexed: true,
+                name: 'tokenId',
+                type: 'uint256',
+            },
+        ],
+        name: 'sellCancelEvent',
+        type: 'event',
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                name: 'account',
+                type: 'address',
+            },
+        ],
+        name: 'OwnerAdded',
+        type: 'event',
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                name: 'account',
+                type: 'address',
+            },
+        ],
+        name: 'OwnerRemoved',
+        type: 'event',
+    },
+    {
+        constant: true,
+        inputs: [],
+        name: 'DepositWallet',
+        outputs: [
+            {
+                name: '',
+                type: 'address',
+            },
+        ],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: true,
+        inputs: [
+            {
+                name: 'account',
+                type: 'address',
+            },
+        ],
+        name: 'isOwner',
+        outputs: [
+            {
+                name: '',
+                type: 'bool',
+            },
+        ],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: true,
+        inputs: [],
+        name: 'klaymint',
+        outputs: [
+            {
+                name: '',
+                type: 'address',
+            },
+        ],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: true,
+        inputs: [],
+        name: 'klaymintFee',
+        outputs: [
+            {
+                name: '',
+                type: 'uint256',
+            },
+        ],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: true,
+        inputs: [],
+        name: 'minted',
+        outputs: [
+            {
+                name: '',
+                type: 'bool',
+            },
+        ],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: true,
+        inputs: [],
+        name: 'mintFeePercent',
+        outputs: [
+            {
+                name: '',
+                type: 'uint256',
+            },
+        ],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: true,
+        inputs: [],
+        name: 'NFTProject',
+        outputs: [
+            {
+                name: '',
+                type: 'address',
+            },
+        ],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: true,
+        inputs: [],
+        name: 'NFTProjectFee',
+        outputs: [
+            {
+                name: '',
+                type: 'uint256',
+            },
+        ],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: true,
+        inputs: [],
+        name: 'released',
+        outputs: [
+            {
+                name: '',
+                type: 'bool',
             },
         ],
         payable: false,

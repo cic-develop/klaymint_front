@@ -7,10 +7,6 @@ import klayicon from '@/_statics/images/icon_kaikas.png';
 import imgSoldOut from '@/_statics/images/soldout.png';
 import imgEndOfSale from '@/_statics/images/endofsale.png';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/redux/connectors.redux';
-import { useLanguages } from '@/hooks/useLanguages.hook';
-
 /**
  * Sold Out Commponent
  * 내부에서만 사용
@@ -164,6 +160,74 @@ const Close: React.FC<any> = (props): JSX.Element => {
     );
 };
 
+const Soldout_Section: React.FC<any> = (props): JSX.Element => {
+    const [strTime, setStrTime] = useState('00:00:00:00');
+    const {
+        //countdown,
+        contract_name,
+        brand_name,
+        ctl_idx,
+        mtl_auto,
+        mtl_createdAt,
+        mtl_endAt,
+        mtl_idx,
+        mtl_imgsrc,
+        mtl_is_private,
+        mtl_mint_count,
+        mtl_max_count,
+        mtl_price,
+        mtl_startAt,
+        mtl_updatedAt,
+        tick,
+    } = props;
+
+    useEffect(() => {
+        if (props.tick === null && props.tick === undefined) return;
+        if (props.tick < 0) return;
+        //console.log(props.mtl_idx, props.tick);
+
+        const sec = String(props.tick % 60).padStart(2, '0');
+        const min = String(Math.floor((props.tick / 60) % 60)).padStart(2, '0');
+        const hour = String(Math.floor((props.tick / (60 * 60)) % 24)).padStart(2, '0');
+        const day = String(Math.floor(props.tick / (60 * 60 * 24))).padStart(2, '0');
+
+        setStrTime(day + ':' + hour + ':' + min + ':' + sec);
+    }, [props.tick, setStrTime]);
+
+    const linkTo = `/collections/${contract_name}/${brand_name}`;
+
+    return (
+        <div className="card shadow-sm">
+            <Link className="closed_overlay position-absolute w-100 h-100" to={linkTo}>
+                <img
+                    className="position-absolute top-50 start-50 translate-middle"
+                    src={imgSoldOut}
+                    alt="Center Icon"
+                    width="80%"
+                />
+            </Link>
+            <Link to={linkTo}>
+                <img className="closed_img" src={window.envBackImageHost + mtl_imgsrc} width={'100%'} />
+            </Link>
+            <div className={'carde-body carde-black'}>
+                <div className="row align-items-center justify-content-between">
+                    <div className="col-xl-7 col-lg-12">
+                        <div className="btn-group">
+                            <Link
+                                to={linkTo}
+                                className="btn btn-coll btn-sm btn-outline-secondary text-center"
+                                style={{ zIndex: 11 }}
+                            >
+                                Collection
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const Open: React.FC<any> = (props): JSX.Element => {
     const {
         onClick,
@@ -225,13 +289,7 @@ const MintWidget: React.FC<any> = (props): JSX.Element => {
     const [soldout, setSoldout] = useState(props.mtl_mint_count >= props.mtl_max_count);
     const [sellout, setSellout] = useState(false);
 
-    const wallet = useSelector((store: RootState) => store.Wallet);
-    const { list } = useSelector((store: RootState) => store.Collections);
-
-    const Lang = useLanguages();
-    const dispatch = useDispatch();
-
-    const { mtl_auto, mtl_mint_count, mtl_max_count, onClick = () => {} } = props;
+    const { mtl_soldout_section, mtl_auto, mtl_mint_count, mtl_max_count, onClick = () => {} } = props;
 
     useEffect(() => {
         setTimeout(() => setTime(time - 1), 1000);
@@ -249,6 +307,14 @@ const MintWidget: React.FC<any> = (props): JSX.Element => {
     }, [time, soldout]);
 
     //Component renders
+    /**
+     * SOLD OUT 섹션 처리
+     */
+    if (mtl_soldout_section) return <Soldout_Section {...props} />;
+
+    /**
+     * 민팅 섹션에서의 처리
+     */
     if (soldout) return <CloseIcon {...props} icon={imgSoldOut} />;
     if (sellout) return <CloseIcon {...props} icon={imgEndOfSale} />;
 

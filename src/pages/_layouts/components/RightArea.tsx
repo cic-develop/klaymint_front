@@ -14,7 +14,7 @@ const RightArea: React.FC<any> = (): JSX.Element => {
             {/* <div className="position-fixed bottom-50 end-0 mx-3" style={{ zIndex: 999 }}>
                 <ul></ul>
             </div> */}
-            <div className="position-fixed bottom-0 end-0 mx-3">
+            <div className="position-fixed bottom-0 end-0 mx-3 mb-5">
                 <ul className="p-0">
                     <li>
                         <a href="https://twitter.com/klaymint" target="_blank" title="Twitter">

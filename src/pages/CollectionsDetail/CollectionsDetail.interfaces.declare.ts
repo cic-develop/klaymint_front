@@ -7,8 +7,3 @@ export interface CollectionsDetailSearchProps {
     token_id: string;
     contract_id: number | string | null;
 }
-
-export interface CollectionsDetailContractInfoProps {
-    list: any;
-    total: any;
-}

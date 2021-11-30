@@ -8,11 +8,6 @@ import { RootState } from '@/redux/connectors.redux';
 
 import { useLanguages } from '@/hooks/useLanguages.hook';
 
-// import {
-//     CollectionsDetailContractInfoProps,
-//     CollectionsDetailSearchProps,
-// } from '@/pages/CollectionsDetail/CollectionsDetail.interfaces.declare';
-
 import cx from 'classnames';
 import css from '@/pages/CollectionsDetail/detailGlobal.module.scss';
 import ProfileImage from '@/pages/CollectionsDetail/components/ProfileImage';
@@ -98,7 +93,7 @@ const CollectionsDetail = (props) => {
                     <div className={cx('row col-12 pt-5', css.imageSectionDiv)}>
                         <ProfileImage
                             src={window.envBackImageHost + collection.brand_img_src}
-                            name={collection.brand_name}
+                            name={collection.contract_view_name}
                             collection={collection}
                         />
                     </div>

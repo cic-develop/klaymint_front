@@ -1,5 +1,5 @@
 /**
- * @title 세션관리용 리덕스
+ * @title 월렛 세션관리용 리덕스
  * @author pts
  * @date 210730
  * @version 1.0.0
@@ -14,6 +14,7 @@ export interface WALLET_INFO {
     name: string;
     address: string;
     balance: number;
+    expire: null | number; //null 이면 무제한
     network?: number;
     myToken: MY_TOKEN;
 }
@@ -37,6 +38,7 @@ const initialState: WALLETS = {
         name: '',
         address: '',
         balance: 0,
+        expire: null,
         network: 0,
         myToken: {
             unlisted: [],
@@ -45,6 +47,8 @@ const initialState: WALLETS = {
         },
     },
 };
+
+const { caver, klaytn } = window;
 
 /** ***************** Orther Function  ****************** */
 /**
@@ -62,7 +66,6 @@ const decryptValue = () => {
         CryptoJS.AES.decrypt(encrptWallet, process.env.REACT_APP_PRIVATE_KEY).toString(CryptoJS.enc.Utf8),
     );
     process.env.REACT_APP_STORE_NAME && sessionStorage.removeItem(process.env.REACT_APP_STORE_NAME);
-
     return obj;
 };
 
@@ -79,11 +82,40 @@ const encryptValue = (data: Record<string, any>) => {
     process.env.REACT_APP_STORE_NAME ? sessionStorage.setItem(process.env.REACT_APP_STORE_NAME, encrptWallet) : null;
 };
 
+/**
+ * Wallet Auto login & load Hook
+ */
+const getPrevWallet = (): WALLETS => {
+    //오토로그인 상태가 아니면 기본값 리턴
+    const autologin = Number(localStorage.getItem('autologin'));
+    const decode_data = decryptValue();
+
+    if (!autologin) return initialState;
+    if (!decode_data) {
+        //localStorage.setItem('autologin', '0');
+        return initialState;
+    }
+
+    // 새로고침 전 데이터 로드
+    const _initialState: WALLETS = decode_data ? decode_data : initialState;
+
+    return _initialState;
+};
+
+const pebToKlay = async (walletAddress) => {
+    const peb = await caver.klay.getBalance(walletAddress);
+    +caver.utils.fromPeb(peb, 'KLAY').toFiexd(2);
+};
+
 /** ***************** ACTIONS  ****************** */
 const LOAD_WALLET = 'WALLET/LOAD_WALLET';
 const SAVE_WALLET = 'WALLET/SAVE_WALLET';
 const REMOVE_WALLET = 'WALLET/REMOVE_WALLET';
+
 const SET_WALLET = 'WALLET/SET_WALLET';
+const CHANGE_KLAYTN_WALLET = 'WALLET/CHANGE_KLAYTN_WALLET';
+const UPDATE_KLAYTN_BALANCE = 'WALLET/UPDATE_KLAYTN_BALENCE';
+
 const SET_ADDRESS = 'WALLET/SET_ADDRESS';
 const SET_NETWORK = 'WALLET/SET_NETWORK';
 const SET_TOKEN = 'WALLET/SET_TOKEN';
@@ -93,11 +125,22 @@ const RESET_WALLET = 'WALLET/RESET_WALLET';
 // const RESET_KAIKAS_EXT_CHECK = 'WALLET/RESET_KAIKAS_EXT_CHECK';
 
 /** ***************** ACTION FUNCTIONS ****************** */
+
 export const loadWallet = createAction(LOAD_WALLET, (data: any) => data);
 export const saveWallet = createAction(SAVE_WALLET, (data: any) => data);
 export const removeWallet = createAction(REMOVE_WALLET);
 
 export const setWallet = createAction(SET_WALLET, (data: any) => data);
+export const changeKlaytnWallet = createAction(CHANGE_KLAYTN_WALLET, async (data: any) => data);
+
+export const updateKlaytnBalance = createAction(UPDATE_KLAYTN_BALANCE, async () => {
+    await klaytn.enable();
+    const peb = await caver.klay.getBalance(klaytn.selectedAddress);
+    const klayBalance = +caver.utils.fromPeb(peb, 'KLAY');
+
+    return Math.floor(klayBalance * 100) / 100;
+});
+
 export const setAddress = createAction(
     SET_ADDRESS,
     (data: { address: string; balance: number; myToken?: any }) => data,
@@ -124,10 +167,11 @@ const reducer = handleActions(
         [REMOVE_WALLET]: (state) => {
             //유저 정보 세션 삭제
             process.env.REACT_APP_STORE_NAME && sessionStorage.removeItem(process.env.REACT_APP_STORE_NAME);
-            return null;
+            return state;
         },
 
         [SET_WALLET]: (state, action) => {
+            //console.log(window.klaytn, window.caver);
             return { ...action.payload };
         },
 
@@ -169,26 +213,52 @@ const reducer = handleActions(
             return { ...initialState };
         },
     },
-    initialState,
+    getPrevWallet(),
 );
 
 export default applyPenders(reducer, [
-    // {
-    //     type: INITIALIZE_KAIKAS_EXT_CHECK,
-    //     // onPending: (state, action) => {return state},
-    //     onSuccess: (state, action) => {
-    //         console.log('INITIALIZE_KAIKAS_EXT_CHECK_ID', action);
-    //         return {
-    //             ...state,
-    //             server: action.payload.data,
-    //         };
-    //     },
-    //     onFailure: (state, action) => {
-    //         console.log('onFailure', action.payload);
-    //         return {
-    //             ...state,
-    //             server: null,
-    //         };
-    //     },
-    // },
+    {
+        type: CHANGE_KLAYTN_WALLET,
+        // onPending: (state, action) => {return state},
+        onSuccess: (state, action) => {
+            const { address, balance, network } = action.payload;
+
+            return {
+                ...state,
+                info: {
+                    ...state.info,
+                    address: address ? address : state.info.address,
+                    balance: balance ? balance : state.info.balance,
+                    network: network ? network : state.info.network,
+                },
+            };
+        },
+        onFailure: (state, action) => {
+            console.log('onFailure', action.payload);
+            return {
+                ...state,
+            };
+        },
+    },
+    {
+        type: UPDATE_KLAYTN_BALANCE,
+        // onPending: (state, action) => {return state},
+        onSuccess: (state, action) => {
+            console.log('UPDATE_KLAYTN_BALANCE', action.payload);
+
+            return {
+                ...state,
+                info: {
+                    ...state.info,
+                    balance: action.payload,
+                },
+            };
+        },
+        onFailure: (state, action) => {
+            console.log('onFailure', action.payload);
+            return {
+                ...state,
+            };
+        },
+    },
 ]);

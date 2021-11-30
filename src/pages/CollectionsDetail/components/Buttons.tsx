@@ -16,11 +16,6 @@ import { numberWithCommas, floatWithCommas } from '@/helpers/common.helper';
 import PriceHistory from '@/_components/commons/modals/_PriceHistoryModal';
 import { getBackgroundColor } from '@/helpers/_common';
 import _ArticleModal from '@/_components/commons/modals/_ArticleModal';
-import { CollectionsDetailContractInfoProps } from '@/reducers/GlobalStatus.reducer';
-
-// interface Props {
-//     contractInfo: CollectionsDetailContractInfoProps;
-// }
 
 const ButtonsInfo = ({ contractInfo }) => {
     const [modal, setModal] = useState(false as string | boolean);
@@ -187,14 +182,17 @@ const DetailModal = ({ modalProps, setModal }) => {
 };
 
 const ShowAttributes = ({ brandName }) => {
+    console.log(brandName);
     const basicValue =
         brandName === 'PoPo'
             ? {
                   ['3.Body']: 'Basic.png',
               }
-            : {
+            : brandName === 'CuteCat'
+            ? {
                   ['2.Body']: 'White.png',
-              };
+              }
+            : {};
     const [viewImage, setViewImage] = useState(basicValue as any);
     const [pngList, setPngList] = useState({} as any);
     const [resImage, setResImage] = useState(null);
@@ -222,7 +220,7 @@ const ShowAttributes = ({ brandName }) => {
             });
             const files = Object.values(res.data).map((item) => {
                 return Object.keys(item).map((fileName, index) => {
-                    return [fileName, Object.values(item)[index][0] | Object.values(item)[index]];
+                    return [fileName, Object.values(item)[index][0] || Object.values(item)[index]];
                 });
             });
 

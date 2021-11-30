@@ -24,7 +24,13 @@ import {
 import { setKlipQR } from '@/redux/reducers/GlobalStatus.reducer';
 import { getMyTokens_in_kaikas } from '@/helpers/klaytn.api';
 import axios from 'axios';
-import { getIsApproved, getIsOwner, getMySalesList, getPebFromKlay } from '@/helpers/klaymint.api';
+import {
+    getIsApproved,
+    getIsOwner,
+    getMySalesList,
+    getPebFromKlay,
+    postExceptionCorsHandlerAll,
+} from '@/helpers/klaymint.api';
 import { setAddress } from '@/redux/reducers/Wallet.reducer';
 
 const IorA = navigator.userAgent.toLowerCase();
@@ -48,7 +54,6 @@ export default class KlayMint {
 
     checkException = (currentOwner) => {
         if (this.exceptionFactoryAddress.indexOf(currentOwner) !== -1) {
-            console.log('true !@@@@');
             this.factoryAddress = currentOwner;
         }
     };
@@ -86,8 +91,8 @@ export default class KlayMint {
                     bappName: myBAppName,
                     from: wallet.info.address,
                     to: this.factoryAddress,
-                    // value: peb.data,
-                    value: '100000000000000',
+                    value: peb.data,
+                    // value: '100000000000000',
                     abi: JSON.stringify(last_mintNFT_ABI),
                     params: JSON.stringify([mtl_idx, +qNumber]),
                     successLink: '#',
@@ -146,6 +151,9 @@ export default class KlayMint {
                 const data = caver.klay.abi.encodeFunctionCall(last_mintNFT_ABI, [mtl_idx, +qNumber]);
                 const peb = toPebFromKlay(caver, mtl_price);
 
+                console.log('klaytn - qmint : ', qNumber);
+                console.log('klaytn - peb   : ', peb);
+
                 /**
                  * sendTransaction() 실제 tx 를 실행시키는 methods
                  */
@@ -154,7 +162,7 @@ export default class KlayMint {
                         type: 'SMART_CONTRACT_EXECUTION',
                         from: wallet.info.address,
                         value: peb,
-                        // value: '100000000000000',
+                        //value: '100000000000000',
                         to: this.factoryAddress,
                         data,
                         gas: 3000000,
@@ -740,6 +748,7 @@ export default class KlayMint {
             const unlistedTokens = arr.flat();
 
             const unlistedTokensInfo = [];
+            const exceptionArr = [];
             await setPromiseAll(unlistedTokens, async (item) => {
                 const { tokenUri } = item.extras;
 
@@ -749,23 +758,43 @@ export default class KlayMint {
                 const case1 = tokenUri.replace('https://ipfs.io/ipfs/', 'https://klaymint.mypinata.cloud/ipfs/');
                 const case2 = case1.replace('ipfs://', 'https://klaymint.mypinata.cloud/ipfs/');
 
+                let response;
+
+                try {
+                    response = await axios.get(case2);
+                } catch (error) {
+                    exceptionArr.push(case2);
+                    response = await axios.post(`${window.envBackHost}/exception/corsHandler`, { uri: case2 });
+                }
+
                 /**
                  * 해당 replace 된 json cid 를 get 요청으로 token 정보를 가져와서 unlistedTokensInfo 배열에 저장
                  */
-                const res = await axios.get(case2);
-                const imageUri = res.data.image.replace('ipfs://', 'https://klaymint.mypinata.cloud/ipfs/');
-                res.data.image = imageUri;
-                res.data.contractAddress = item.contractAddress;
+                const imageUri = response.data.image.replace('ipfs://', 'https://klaymint.mypinata.cloud/ipfs/');
+                response.data.image = imageUri.replace('gateway.pinata.cloud/ipfs/', 'klaymint.mypinata.cloud/ipfs/');
+                response.data.contractAddress = item.contractAddress;
 
-                unlistedTokensInfo.push(res.data);
+                unlistedTokensInfo.push(response.data);
             });
 
+            // if (exceptionArr.length > 0) {
+            //     const res = await postExceptionCorsHandlerAll(exceptionArr);
+            //     const newArr = unlistedTokensInfo.concat(res.data);
+            //
+            //     const onSaleTokens = await getMySalesList(wallet.info.address);
+            //
+            //     return {
+            //         unlisted: newArr,
+            //         onSale: onSaleTokens.data,
+            //     };
+            // } else {
             const onSaleTokens = await getMySalesList(wallet.info.address);
 
             return {
                 unlisted: unlistedTokensInfo,
                 onSale: onSaleTokens.data,
             };
+            // }
         }
     };
 

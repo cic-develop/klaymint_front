@@ -1,4 +1,4 @@
-import Reacet, { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Fade from 'react-reveal/Fade';
 import { Route, Switch, Link } from 'react-router-dom';
 
@@ -98,13 +98,13 @@ const ImageSlider: React.FC<any> = (props): JSX.Element => {
                                 <img width="100%" height="100%" src={bg01} />
                             )}
                         </li>
-                        <li className="splide__slide">
-                            {breakpoint === 'xs' ? (
-                                <img width="100%" height="100%" src={bg_m02} />
-                            ) : (
-                                <img width="100%" height="100%" src={bg02} />
-                            )}
-                        </li>
+                        {/*<li className="splide__slide">*/}
+                        {/*    {breakpoint === 'xs' ? (*/}
+                        {/*        <img width="100%" height="100%" src={bg_m02} />*/}
+                        {/*    ) : (*/}
+                        {/*        <img width="100%" height="100%" src={bg02} />*/}
+                        {/*    )}*/}
+                        {/*</li>*/}
                     </ul>
                 </div>
             </div>

@@ -10,6 +10,7 @@ const fs = require("fs");
 const moment = require("moment");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const nocache = require("nocache");
 //const initEventHandler = require("./eventHandler")();
 
 //환경변수
@@ -29,6 +30,7 @@ const { SERVER_INFO, SERVER_AUTH_INFO, SERVER_HTTP_PORT, SERVER_HTTPS_PORT } = r
 server.set("RS_KEY", SERVER_AUTH_INFO);
 server.use(cookieParser("secret"));
 
+//server.use(nocache());
 server.use(logger("dev"));
 server.use(express.json());
 server.use(express.urlencoded({ extended: false }));

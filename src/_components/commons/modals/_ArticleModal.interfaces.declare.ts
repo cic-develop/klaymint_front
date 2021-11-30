@@ -1,5 +1,4 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { CollectionsDetailContractInfoProps } from '@/redux/reducers/GlobalStatus.reducer';
 
 /**
  * props : _ArticleModal 을 그릴 때 전달 받는 jsx 또는 content data

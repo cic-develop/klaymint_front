@@ -127,6 +127,12 @@ export default {
     main_box_title_minigame: 'Mini Game',
 
     /**
+     * 이용 약관,
+     */
+    footer_term_of_use: 'Term of Use',
+    footer_supports: 'Support',
+
+    /**
      * 콜렉션 리스트
      */
     list_no_collections: 'There is no Collection',

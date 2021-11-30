@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import _ArticleModal from '@/_components/commons/modals/_ArticleModal';
 import { ArticleModalProps } from '@/_components/commons/modals/_ArticleModal.interfaces.declare';
-import { CollectionsDetailContractInfoProps } from '@/reducers/GlobalStatus.reducer';
 import _notExistClassArticleModal from '@/_components/commons/modals/_notExistClassArticleModal';
 
 interface Props {

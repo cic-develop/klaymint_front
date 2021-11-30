@@ -9,11 +9,6 @@ export interface klipQR {
     device: string;
 }
 
-export interface CollectionsDetailContractInfoProps {
-    list: any;
-    total: any;
-}
-
 type BREAKPOINT_TYPE = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
 /** ***************** inner Function  ****************** */
@@ -42,8 +37,6 @@ const MODAL = 'GLOBAL_STATUS/MODAL';
 const BREAKPOINT = 'GLOBAL_STATUS/BREAKPOINT';
 const klipQR = 'GLOBAL_STATUS/QR_CANVAS';
 
-const contractListInfo = 'GLOBAL_STATUS/CONTRACT_LIST';
-
 /** ***************** ACTION FUNCTIONS ****************** */
 export const pingServer = createAction(SERVER);
 export const setLanguage = createAction(LANGUAGE, (data: string) => data);
@@ -56,8 +49,6 @@ export const setModal = createAction(MODAL, (data: boolean) => data);
 export const setKlipQR = createAction(klipQR, (data: klipQR | klipQR[] | null) => data);
 export const detectedBreakpoint = createAction(BREAKPOINT);
 
-export const setContractListInfo = createAction(contractListInfo, (data) => data);
-
 const initialState = {
     Language_browser: navigator.language,
     language: localStorage.getItem(keyNameLanguage) ? localStorage.getItem(keyNameLanguage) : 'en-US',
@@ -67,7 +58,6 @@ const initialState = {
     orientation: !navigator.maxTouchPoints ? 'desktop' : !window.orientation ? 'portrait' : 'landscape',
     autoconn: localStorage.getItem(keyNameAutoLogin) === '1' ? true : false,
     klipQR: null,
-    contractListInfo: '',
 };
 
 const reducer = handleActions(
@@ -134,11 +124,6 @@ const reducer = handleActions(
         [klipQR]: (state, action) => ({
             ...state,
             klipQR: action.payload,
-        }),
-
-        [contractListInfo]: (state, action) => ({
-            ...state,
-            contractListInfo: action.payload,
         }),
     },
     initialState,

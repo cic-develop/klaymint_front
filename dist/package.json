@@ -1,5 +1,5 @@
 {
-  "name": "rsteam_admin_website",
+  "name": "dev_test_website",
   "version": "1.0.0",
   "description": "RSTeam_Admin_Website_Frontend_Server",
   "main": "start.js",
@@ -25,6 +25,7 @@
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
     "morgan": "^1.10.0",
+    "nocache": "^3.0.1",
     "nodemailer": "^6.4.17",
     "public-ip": "^4.0.3",
     "sha256": "^0.2.0",

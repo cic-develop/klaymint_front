@@ -22,7 +22,6 @@ import Loader from '@/_components/commons/loaders/loader';
 
 import Default_Thumb from '@/_statics/images/footer-logo.png';
 import _ from 'lodash';
-import { setContractListInfo } from '@/redux/reducers/GlobalStatus.reducer';
 
 const Dashboard = () => {
     const dispatch = useDispatch();
@@ -317,7 +316,7 @@ const Dashboard = () => {
                                                 }}
                                             >
                                                 <div className={css.name}>
-                                                    <span>{el.contract_name}</span>
+                                                    <span>{el.contract_view_name}</span>
                                                     <p>{numberWithCommas(el.sttc_total_mint, '')}</p>
                                                 </div>
                                             </Link>

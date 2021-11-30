@@ -12,7 +12,7 @@ dotenv.config();
 const baseURL = 'https://th-api.klaytnapi.com/v2';
 
 const contractAddresses: string[] = [
-    '0x0Ed55aEe0399064Cfe51dD3cC10D99734bb796c7', // PoPo
+    '0x0Ed55aEe0399064Cfe51dD3cC10D99734bb796c7', // PoPo main..
     '0xe47e90c58f8336a2f24bcd9bcb530e2e02e1e8ae', // dsc
     '0x3b0a9c4cfa6dd8a2cbecb1e0ad9a35336970afdf', // jo
     '0xc904e0ab77139f65c78b192bcf7266da85cc3343', // rabbit
@@ -23,7 +23,16 @@ const contractAddresses: string[] = [
 ];
 
 export const getMyTokens_in_kaikas = async (walletAddress: string, address, cursor?) => {
-    const contractAddress = address.map((item) => item.contract_address);
+    const contractAddress = address
+        // .filter((item) => {
+        //     if (
+        //         item.contract_address !== '0xc904e0ab77139f65c78b192bcf7266da85cc3343' &&
+        //         item.contract_address !== '0x590744cb8cf1a698d7db509b52bf209e3cccb8e0'
+        //     ) {
+        //         return item;
+        //     }
+        // })
+        .map((item) => item.contract_address);
 
     if (cursor) {
         return await axios.get(
@@ -62,34 +71,6 @@ export const getAllToken_in_factory = async (factoryAddress, contractAddress, cu
     } else {
         return await axios.get(
             `${baseURL}/account/${factoryAddress}/token?kind=nft&ca-filters=${contractAddress}&size=1000`,
-            {
-                headers: {
-                    'X-Chain-Id': '8217',
-                    'Authorization': klaytnAPIToken,
-                },
-            },
-        );
-    }
-};
-
-export const getAllToken_in_for_move_factory = async (cursor?) => {
-    if (cursor) {
-        return await axios.get(
-            `${baseURL}/account/${forMoveFactoryAddress}/token?kind=nft&ca-filters=${contractAddresses.join(
-                ',',
-            )}&size=1000&cursor=${cursor}`,
-            {
-                headers: {
-                    'X-Chain-Id': '8217',
-                    'Authorization': klaytnAPIToken,
-                },
-            },
-        );
-    } else {
-        return await axios.get(
-            `${baseURL}/account/${forMoveFactoryAddress}/token?kind=nft&ca-filters=${contractAddresses.join(
-                ',',
-            )}&size=1000`,
             {
                 headers: {
                     'X-Chain-Id': '8217',

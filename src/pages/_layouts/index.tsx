@@ -28,9 +28,9 @@ const Layout: React.FC<any> = (props: any): JSX.Element => {
 
                 {/* Fixed Div -- z Index 때문에 콘텐츠보다 아래에 랜더링 */}
             </div>
-            <Slide bottom>
-                <Footer />
-            </Slide>
+            {/* <Slide bottom> */}
+            <Footer />
+            {/* </Slide> */}
             <RightArea />
         </>
     );

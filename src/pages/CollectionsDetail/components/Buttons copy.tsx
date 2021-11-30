@@ -10,11 +10,6 @@ import { numberWithCommas } from '@/helpers/common.helper';
 import PriceHistory from '@/_components/commons/modals/_PriceHistoryModal';
 import { getBackgroundColor } from '@/helpers/_common';
 import _ArticleModal from '@/_components/commons/modals/_ArticleModal';
-import { CollectionsDetailContractInfoProps } from '@/reducers/GlobalStatus.reducer';
-
-// interface Props {
-//     contractInfo: CollectionsDetailContractInfoProps;
-// }
 
 const ButtonsInfo = ({ contractInfo, classs }) => {
     const [modal, setModal] = useState(false as string | boolean);

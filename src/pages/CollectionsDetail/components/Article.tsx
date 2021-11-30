@@ -19,7 +19,7 @@ import NoItems from '@/_components/commons/NoItems';
 import iconKaikas from '@/_statics/images/icon_kaikas.png';
 import KlayMint from '@/helpers/linkBlockchainNetwork';
 import { remoteModalOpener } from '@/_components/commons/modals';
-import { getLimitSalesList } from '@/helpers/klaymint.api';
+import { getLimitSalesList, postExceptionCorsHandler } from '@/helpers/klaymint.api';
 import { CollectionsDetailSearchProps } from '@/pages/CollectionsDetail/CollectionsDetail.interfaces.declare';
 
 interface Props {
@@ -63,16 +63,25 @@ const Article: React.FC<any> = ({ search, collection }: Props): JSX.Element => {
     const loadArticleModal = async (item) => {
         const isWallet = wallet.info.address !== '';
         const isOwner = wallet.info.address.toLowerCase() === item.data.owner_address.toLowerCase();
-        const res = await axios.get(item.data.attributes);
-        const attrArr = res.data.attributes
+
+        let response;
+
+        item.data.attributes = item.data.attributes.replace(
+            'https://ipfs.io/ipfs/',
+            'https://klaymint.mypinata.cloud/ipfs/',
+        );
+        item.data.attributes = item.data.attributes.replace('ipfs://', 'https://klaymint.mypinata.cloud/ipfs/');
+
+        try {
+            response = await axios.get(item.data.attributes);
+        } catch (error) {
+            response = await postExceptionCorsHandler(item.data.attributes);
+        }
+
+        const attrArr = response.data.attributes
             .filter((item) => item.trait_type !== 'id')
             .map((item) => Object.values(item));
         const currentClasss = classs[collection?.id];
-
-        //console.log(item.data);
-
-        // 실제 is_class 를 0으로 두는 테스트
-        // collection.is_class = 0;
 
         setModalProps({
             collection: collection,
@@ -82,7 +91,7 @@ const Article: React.FC<any> = ({ search, collection }: Props): JSX.Element => {
                 mainDescButtons: [
                     `OWNED BY ${item.data.owner_address.slice(0, 3)}...${item.data.owner_address.slice(-3)}`,
                 ],
-                mainDesc: res.data.description,
+                mainDesc: response.data.description,
                 mainAttrs: attrArr,
                 mainAttrDesc: currentClasss,
                 footerPrice: item.data.sales_price,
@@ -183,7 +192,7 @@ const Article: React.FC<any> = ({ search, collection }: Props): JSX.Element => {
                                     </div>
                                     <div className={css.txtContainer}>
                                         <h5>
-                                            {collection.brand_name} #{item.data.token_id}
+                                            {collection.brand_view_name} #{item.data.token_id}
                                         </h5>
                                         <h5>{item.data.class}</h5>
                                         <button className="col-12 text-break" type="button">

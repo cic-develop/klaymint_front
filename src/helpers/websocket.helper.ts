@@ -14,7 +14,7 @@ class WebSocketModel {
 
     // variables
     private ws: WebSocket;
-    private user: Navigator;
+    private _user: Navigator;
 
     constructor() {
         //super();
@@ -24,7 +24,7 @@ class WebSocketModel {
     //Member Methods
     public initialize = () => {
         this.ws = new WebSocket(this.SERVER_ADDR);
-        this.user = window.navigator;
+        this._user = window.navigator;
 
         //registed EventHandler
         this.ws.onopen = this._handleOpen;
@@ -34,21 +34,38 @@ class WebSocketModel {
 
         // registed Custom EventHandler
         console.log('*** Ready to WebSocket ***');
+        // console.log(this.ws.CONNECTING); // 0
+        // console.log(this.ws.OPEN);       // 1
+        // console.log(this.ws.CLOSING);    // 2
+        // console.log(this.ws.CLOSED);     // 3
     };
 
+    //getter
     public getWebSocket = () => this.ws;
-    public getUser = () => this.user;
+    public user = () => this._user;
+    public state = () => this.ws.readyState;
 
-    public sendMessage = (data) => this.ws.send(data);
+    public sendMessage = (data: string | ArrayBufferLike | Blob | ArrayBufferView) => {
+        if (this.ws.readyState !== this.ws.OPEN) {
+            console.log('** WebSocket is not Open **');
+            new Error('** WebSocket is Close **');
+            return;
+        }
+        this.ws.send(data);
+    };
 
-    private _handleOpen = () => {
+    private _handleOpen = (e: Event) => {
         console.log('Connected WebSocket >>', this.SERVER_ADDR);
     };
-    private _handleClose = () => {
+    private _handleClose = (e: CloseEvent) => {
         console.log('Closed WebSocket >>', this.SERVER_ADDR);
     };
-    private _handleError = () => {};
-    private _handleMessage = () => {};
+    private _handleError = (err: Event) => {
+        console.log('Error WebSocket >>');
+    };
+    private _handleMessage = (wssMsg: MessageEvent<any>) => {
+        console.log('Received Message >>', wssMsg);
+    };
 }
 
 export default new WebSocketModel();

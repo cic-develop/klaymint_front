@@ -128,6 +128,12 @@ export default {
     header_modal_klip_footer_desc3: '코드 스캔',
 
     /**
+     * 이용 약관,
+     */
+    footer_term_of_use: '이용약관',
+    footer_supports: '문의',
+
+    /**
      * 메인 페이지 내용 중 단위별 타이틀,
      */
     main_box_title_minting_now: 'Minting',
@@ -197,7 +203,6 @@ export default {
     /**
      * 이용 약관,
      */
-    term_of_use: '이용 약관',
     term_of_use_title: '서비스 이용약관',
 
     validate_msg_required: '필수 항목입니다.',

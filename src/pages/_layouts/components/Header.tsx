@@ -19,6 +19,8 @@ import {
     setAddress,
     setNetwork,
     resetWallet,
+    changeKlaytnWallet,
+    updateKlaytnBalance,
 } from '@/redux/reducers/Wallet.reducer';
 import { RootState } from '@/redux/connectors.redux';
 
@@ -39,6 +41,7 @@ import logo from '@/_statics/images/mint-logo.png';
 import iconKakao from '@/_statics/images/KakaoTalk_icon_256.png';
 import iconRG from '@/_statics/images/KakaoTalk_rg_256.png';
 import iconScan from '@/_statics/images/KakaoTalk_scan_256.png';
+import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 
 const Header: React.FC<any> = (props): JSX.Element => {
     const adressStrRef = useRef(null);
@@ -92,25 +95,24 @@ const Header: React.FC<any> = (props): JSX.Element => {
             try {
                 await klaytn.enable();
 
-                console.log('-- klaytn : ', klaytn);
-                console.log('-- klaytn.selectedAddress : ', klaytn.selectedAddress);
-
-                const balance = await caver.klay.getBalance(klaytn.selectedAddress);
-                const klayBalance = toKlayFromPeb(caver, balance);
-
                 await dispatch(
                     setWallet({
-                        isConn: await klaytn?._kaikas.isUnlocked(),
+                        isConn: await klaytn._kaikas.isUnlocked(),
                         type: 'kaikas',
                         info: {
                             ...wallet.info,
                             name: 'My Wallet',
                             address: klaytn.selectedAddress,
-                            balance: klayBalance,
+                            //balance: klayBalance,
                             network: klaytn.networkVersion,
+                            expire: null,
                         },
                     }),
                 );
+
+                await dispatch(updateKlaytnBalance());
+
+                dispatch(autologin(true));
                 sessionStorage.removeItem('klmin_lt');
                 window.toast('success', Lang.suc_msg_sucs_connect_kaikas);
             } catch (error) {
@@ -170,9 +172,12 @@ const Header: React.FC<any> = (props): JSX.Element => {
                                         name: 'My Wallet',
                                         address: data.result.klaytn_address,
                                         balance: balance.data,
+                                        expire: res.expiration_time * 1000,
                                     },
                                 }),
                             );
+
+                            await dispatch(autologin(true));
 
                             /* 유효 기간 */
                             clearInterval(mobilePolling);
@@ -217,7 +222,6 @@ const Header: React.FC<any> = (props): JSX.Element => {
                                 const balance = await getKlayFromAddress(data.result.klaytn_address);
 
                                 if (data.result) {
-                                    console.log('dispatch');
                                     await dispatch(
                                         setWallet({
                                             isConn: true,
@@ -227,9 +231,11 @@ const Header: React.FC<any> = (props): JSX.Element => {
                                                 name: 'My Wallet',
                                                 address: data.result.klaytn_address,
                                                 balance: balance.data,
+                                                expire: res.expiration_time * 1000,
                                             },
                                         }),
                                     );
+                                    await dispatch(autologin(true));
 
                                     /* 유효 기간 */
                                     clearInterval(polling);
@@ -266,48 +272,56 @@ const Header: React.FC<any> = (props): JSX.Element => {
         const { klaytn, caver } = window;
 
         if (klaytn) {
+            if (wallet.type === 'kaikas') {
+                klaytn._kaikas
+                    .isUnlocked()
+                    .then((res) => {
+                        if (!res) {
+                            dispatch(resetWallet());
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(wallet.type, err);
+                    });
+            }
+
             klaytn.on('accountsChanged', async (account) => {
-                if (wallet.info.type === 'klip') return;
-                const balance = await caver.klay.getBalance(account[0]);
-                const klayBalance = toKlayFromPeb(caver, balance);
+                if (wallet.type === 'klip') return;
+                console.log('check accountsChanged', wallet.type);
 
                 dispatch(
-                    setAddress({
+                    changeKlaytnWallet({
                         address: account[0],
-                        balance: klayBalance,
                     }),
                 );
+                dispatch(updateKlaytnBalance());
             });
-            klaytn.on('networkChanged', (network) => {
+
+            klaytn.on('networkChanged', async (network) => {
+                if (wallet.type === 'klip') return;
+                console.log('check networkChanged', wallet.type);
+
                 if (network === 1001 || network === '1001') {
                     console.error('test network : ', network);
                     window?.toast('error', Lang.err_msg_fail_do_not_test_network);
                     return;
                 }
 
-                if (wallet.info.type === 'kaikas') {
-                    dispatch(setNetwork(network));
-                }
+                dispatch(
+                    changeKlaytnWallet({
+                        network: network,
+                    }),
+                );
+                dispatch(updateKlaytnBalance());
             });
         }
-        //세션 스토리지에 있는 지갑정보 Store로 로드
-        dispatch(loadWallet(wallet));
 
         //새로고침시 지갑 정보 저장 이밴트 핸들러 시작
         enablePrevent();
 
-        //Autoconnect가 ture 이고 kaikas 확장프로그램이 Lock 되었을 경우
-        //자동 로그인 시도
-        //if (autoconn && !wallet.isConn) {
-        // console.log('try Connecting...');
-
-        if (!mobile && klaytn) connectKaikasHandler();
-        //}
-
+        //새로고침시 지갑 정보 저장 이밴트 핸들러 종료
         return () => {
             console.log('disable Restore Wallat Data');
-
-            //새로고침시 지갑 정보 저장 이밴트 핸들러 종료
             disablePrevent();
         };
     }, []);
@@ -375,7 +389,7 @@ const Header: React.FC<any> = (props): JSX.Element => {
                                                                             width="16px"
                                                                             height="16px"
                                                                         />{' '}
-                                                                        {wallet.info.balance.toFixed(2)}
+                                                                        {wallet.info.balance}
                                                                     </>
                                                                 )}
                                                                 {wallet.type === 'klip' && (
@@ -478,14 +492,22 @@ const Header: React.FC<any> = (props): JSX.Element => {
                                                 onClick={() => copyToClipboardHandler(wallet.info.address)}
                                             >
                                                 <i className="far fa-copy" />{' '}
-                                                <span ref={adressStrRef}>{wallet.info.address.slice(0, 8)}... </span>
+                                                <span ref={adressStrRef}>
+                                                    {wallet.info.address ? (
+                                                        wallet.info.address.slice(0, 8)
+                                                    ) : (
+                                                        <div className="spinner-border text-light" role="status">
+                                                            <span className="visually-hidden">Loading...</span>
+                                                        </div>
+                                                    )}{' '}
+                                                </span>
                                             </button>
                                             {/**************** 코인 갯수 ****************/}
                                             <button className="btn loginWalletBtn">
                                                 {wallet.type === 'kaikas' && (
                                                     <>
                                                         <img src={iconKaikas} width="16px" height="16px" />{' '}
-                                                        {wallet.info.balance.toFixed(2)}
+                                                        {wallet.info.balance}
                                                     </>
                                                 )}
                                                 {wallet.type === 'klip' && <img src={iconKlip_W} width="25px" />}
@@ -533,9 +555,7 @@ const Header: React.FC<any> = (props): JSX.Element => {
                                     modalKlip
                                     type="button"
                                     className={cx('col-md-12 btn py-2 mb-3 fw-bold', css.kaiasButton)}
-                                    onClick={async () => {
-                                        await connectKaikasHandler();
-                                    }}
+                                    onClick={connectKaikasHandler}
                                 >
                                     <img src={iconKaikas} width="25px" /> {Lang.header_modal_conn_kaikas}
                                 </ModalButton>

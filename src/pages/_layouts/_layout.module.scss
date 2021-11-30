@@ -135,13 +135,33 @@
     color: #fff;
 
     .concatContainer {
+        display: flex;
+        justify-content: space-between;
         font-family: 'Cafe24SsurroundAir';
         font-size: 1.5vh;
+
+        div {
+            cursor: pointer;
+            i {
+                font-size: 14px;
+            }
+        }
     }
-    // .termOfUse {
-    //     &:hover {
-    //         text-decoration: underline;
-    //         text-underline-position: under;
-    //     }
-    // }
+}
+
+
+@media (max-width: 1400px) {
+    .mainFooter {
+        .concatContainer {
+            display: block;
+            .footerInlineDisplay {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                i {
+                    margin-right: 5px;
+                }
+            }
+        }
+    }
 }

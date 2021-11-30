@@ -12,32 +12,39 @@ const Footer: React.FC<any> = (): JSX.Element => {
 
     return (
         <>
-            <footer className="fiexd-bottom bottom-0 m-0 p-0">
+            <footer className="bottom-0 m-0 p-0">
                 <div className={cx('row align-items-center text-center py-3', css.mainFooter)}>
                     <div className="col-4">
                         <img width={64} src={footerLogo} alt="klaymintFooterLogo" />
                     </div>
                     <div className={cx('col-4 align-items-center text-center', css.concatContainer)}>
-                        <div className="col-12" onClick={() => openPage('https://forms.gle/5BtCSpBvLtJ7LLdHA')}>
-                            {/* <img width={16} src={googleFormLogo} alt="googleFormLogo" /> Listing Contact */}
-                            <i className="fas fa-file-alt" /> Listing Contact
+                        <div
+                            onClick={() => openPage('https://forms.gle/5BtCSpBvLtJ7LLdHA')}
+                            className={css.footerInlineDisplay}
+                        >
+                            <i className="fas fa-file-alt" />
+                            <p>Listing Contact</p>
                         </div>
-                        <div className={css.emailSection}>
-                            <div onClick={() => openPage('mailto:klaytn@klaymint.io')}>
-                                <i className="fas fa-envelope" /> klaytn@klaymint.io
-                            </div>
+                        <div onClick={() => openPage('mailto:klaytn@klaymint.io')} className={css.footerInlineDisplay}>
+                            <i className="fas fa-envelope" />
+                            <p>klaytn@klaymint.io</p>
                         </div>
                     </div>
                     <div className={cx('col-4', css.termOfUseContainer)}>
+                        <div onClick={() => openPage('mailto:support@klaymint.io')} className="btn btn-sm">
+                            {Lang.footer_supports}
+                        </div>
+                        {'|'}
                         <ModalButton id="termOfUse" className="btn btn-sm text-white">
-                            {Lang.term_of_use}
+                            {Lang.footer_term_of_use}
                         </ModalButton>
-                        <button className="btn text-white">
-                            <i className="fas fa-copyright" />
-                        </button>
+                        {'|'}
                         <a className="btn text-white" href="http://docs.klaymint.io" target="_blank">
                             <i className="fas fa-file-alt" />
                         </a>
+                        {/* <button className="btn text-white">
+                            <i className="fas fa-copyright" />
+                        </button> */}
                     </div>
                 </div>
             </footer>

@@ -91,33 +91,35 @@ const index = () => {
             <ImageSlider />
             <main className="container">
                 {/* ************************** Minting... ************************** */}
-                <Slide bottom>
-                    <Section>
-                        <Box className="p-3" title={Lang.main_box_title_mint}>
-                            <div className="sur flex-center">
-                                <div className="dove coll-lg-5 text-center mb-5">
-                                    <h5 className="text-danger">series</h5>
-                                    <h2 className="tit">MINTING</h2>
-                                    {/*<h2 className="tit">Minting</h2>*/}
+                {_.size(mintingDatas.mint) > 0 && (
+                    <Slide bottom>
+                        <Section>
+                            <Box className="p-3" title={Lang.main_box_title_mint}>
+                                <div className="sur flex-center">
+                                    <div className="dove coll-lg-5 text-center mb-5">
+                                        <h5 className="text-danger">series</h5>
+                                        <h2 className="tit">MINTING</h2>
+                                        {/*<h2 className="tit">Minting</h2>*/}
+                                    </div>
                                 </div>
-                            </div>
-                            {/* <div className="card-header border-0 text-center pb-2 btnm">
+                                {/* <div className="card-header border-0 text-center pb-2 btnm">
                             <button type="button" className="btnmint">
                                 More
                             </button>
                         </div> */}
-                            <MintArea
-                                id="mint"
-                                data={mintingDatas.mint}
-                                count={mintCounts}
-                                onMintCallback={(chilrenData) => {
-                                    onMintModalOpenHandler();
-                                    setChoiceMint(chilrenData);
-                                }}
-                            />
-                        </Box>
-                    </Section>
-                </Slide>
+                                <MintArea
+                                    id="mint"
+                                    data={mintingDatas.mint}
+                                    count={mintCounts}
+                                    onMintCallback={(chilrenData) => {
+                                        onMintModalOpenHandler();
+                                        setChoiceMint(chilrenData);
+                                    }}
+                                />
+                            </Box>
+                        </Section>
+                    </Slide>
+                )}
 
                 {/************************* next nft series 시작 *************************/}
                 <section className="py-7">

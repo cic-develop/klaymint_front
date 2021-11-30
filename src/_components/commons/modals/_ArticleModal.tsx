@@ -217,7 +217,8 @@ const _ArticleModal = ({ collection, props, setModal, style }: ArticleModalProps
 
                                                                 /* 유효 기간 */
                                                                 clearInterval(polling);
-
+                                                                remoteWizardOpener('wizzard');
+                                                                setMintLock(false);
                                                                 dispatch(setKlipQR(null)); // 모달 닫기
                                                                 window?.toast('success', qrType(klipQR[1]).suc);
                                                             }
@@ -268,6 +269,8 @@ const _ArticleModal = ({ collection, props, setModal, style }: ArticleModalProps
 
                                         /* 유효 기간 */
                                         clearInterval(polling);
+                                        remoteWizardOpener('wizzard');
+                                        setMintLock(false);
                                         dispatch(setKlipQR(null)); // 모달 닫기
                                         window?.toast('success', qrType(klipQR).suc);
                                     }
@@ -383,7 +386,7 @@ const _ArticleModal = ({ collection, props, setModal, style }: ArticleModalProps
                                             <button
                                                 onClick={() =>
                                                     window.open(
-                                                        `https://scope.klaytn.com/nft/0x0ed55aee0399064cfe51dd3cc10d99734bb796c7/${
+                                                        `https://scope.klaytn.com/nft/${collection.contract_address}/${
                                                             props.title?.split('#')[1]
                                                         }`,
                                                     )
