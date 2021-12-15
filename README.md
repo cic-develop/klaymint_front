@@ -1,47 +1,15 @@
-# Getting Started with Create React App
-# add to dev
+# Klaymint Frontend 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Klaymint Frontend 저장소입니다.
 
-## Available Scriptsgit
+클레이민트의 프론트앤드 소스가 일부 공개 되어있습니다.
 
-In the project directory, you can run:
+해당 프로젝트는 아래와 같은 기능이 포함되어 있습니다.
+(단, 비동기 데이터 로딩이 필요한 기능은 정상적으로 동작하지 않을 수 있습니다.)
 
-### `yarn start`
+아래 기능 중 일부는 표시되지 않거나 정상동작하지 않을 수 있습니다.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- klaymint main 이미지 슬라이드 
+- 민트 지원 기능
+- kaikas wallet 지갑, Klip 지갑 연동 기능
+- NFT 거래 기능
